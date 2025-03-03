@@ -1,4 +1,4 @@
-
+import 'package:flutter/material.dart';
 class AuthScreen extends StatefulWidget {
   @override
   _AuthScreenState createState() => _AuthScreenState();
