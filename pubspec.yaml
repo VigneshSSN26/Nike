@@ -4,7 +4,8 @@ version: 1.0.0
 homepage: https://github.com/VigneshSSN26/Nike
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: "environment:
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
