@@ -6,33 +6,44 @@ class CalculatorScreen extends StatefulWidget {
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
-  String input = '';
-  String output = '';
+  String _output = "0";
+  String _currentInput = "";
+  double _num1 = 0;
+  double _num2 = 0;
+  String _operation = "";
 
-  void onButtonClick(String value) {
+  void _buttonPressed(String text) {
     setState(() {
-      if (value == 'C') {
-        input = '';
-        output = '';
-      } else if (value == '=') {
-        try {
-          output = evaluateExpression(input).toString();
-        } catch (e) {
-          output = 'Error';
+      if (text == "C") {
+        _output = "0";
+        _currentInput = "";
+        _num1 = 0;
+        _num2 = 0;
+        _operation = "";
+      } else if (text == "+" || text == "-" || text == "x" || text == "/") {
+        _num1 = double.parse(_currentInput);
+        _operation = text;
+        _currentInput = "";
+      } else if (text == "=") {
+        _num2 = double.parse(_currentInput);
+        if (_operation == "+") {
+          _output = (_num1 + _num2).toString();
+        } else if (_operation == "-") {
+          _output = (_num1 - _num2).toString();
+        } else if (_operation == "x") {
+          _output = (_num1 * _num2).toString();
+        } else if (_operation == "/") {
+          _output = (_num1 / _num2).toString();
         }
+        _currentInput = _output;
+        _num1 = 0;
+        _num2 = 0;
+        _operation = "";
       } else {
-        input += value;
+        _currentInput += text;
+        _output = _currentInput;
       }
     });
-  }
-
-  double evaluateExpression(String expression) {
-    // Basic expression evaluation (use a proper parser for complex cases)
-    try {
-      return double.parse(expression);
-    } catch (e) {
-      return 0;
-    }
   }
 
   @override
@@ -41,31 +52,51 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
       appBar: AppBar(title: Text("Calculator")),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children: <Widget>[
           Text(
-            input,
+            _output,
             style: TextStyle(fontSize: 32),
           ),
           Text(
-            output,
+            _currentInput,
             style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
           ),
-          GridView.count(
-            shrinkWrap: true,
-            crossAxisCount: 4,
-            children: [
-              '7', '8', '9', 'C',
-              '4', '5', '6', '/',
-              '1', '2', '3', '*',
-              '0', '.', '=', '+',
-            ].map((value) {
-              return ElevatedButton(
-                onPressed: () => onButtonClick(value),
-                child: Text(value, style: TextStyle(fontSize: 24)),
-              );
-            }).toList(),
+          SizedBox(height: 20),
+          Wrap(
+            children: <Widget>[
+              _buildButton("7"),
+              _buildButton("8"),
+              _buildButton("9"),
+              _buildButton("/"),
+              _buildButton("4"),
+              _buildButton("5"),
+              _buildButton("6"),
+              _buildButton("x"),
+              _buildButton("1"),
+              _buildButton("2"),
+              _buildButton("3"),
+              _buildButton("-"),
+              _buildButton("C"),
+              _buildButton("0"),
+              _buildButton("="),
+              _buildButton("+"),
+            ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildButton(String text) {
+    return SizedBox(
+      width: 70,
+      height: 70,
+      child: ElevatedButton(
+        onPressed: () => _buttonPressed(text),
+        child: Text(
+          text,
+          style: TextStyle(fontSize: 24),
+        ),
       ),
     );
   }
