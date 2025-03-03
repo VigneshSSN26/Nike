@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+
 class CalculatorScreen extends StatefulWidget {
   @override
   _CalculatorScreenState createState() => _CalculatorScreenState();
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
-  String input = "";
-  String result = "";
+  String input = '';
+  String output = '';
 
-  void onButtonPressed(String value) {
+  void onButtonClick(String value) {
     setState(() {
-      if (value == "C") {
-        input = "";
-        result = "";
-      } else if (value == "=") {
+      if (value == 'C') {
+        input = '';
+        output = '';
+      } else if (value == '=') {
         try {
-          result = _evaluateExpression(input);
+          output = evaluateExpression(input).toString();
         } catch (e) {
-          result = "Error";
+          output = 'Error';
         }
       } else {
         input += value;
@@ -25,11 +26,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     });
   }
 
-  String _evaluateExpression(String expression) {
+  double evaluateExpression(String expression) {
+    // Basic expression evaluation (use a proper parser for complex cases)
     try {
-      return (double.parse(expression).toString());
+      return double.parse(expression);
     } catch (e) {
-      return "Error";
+      return 0;
     }
   }
 
@@ -45,24 +47,21 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
             style: TextStyle(fontSize: 32),
           ),
           Text(
-            result,
+            output,
             style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 20),
-          Wrap(
+          GridView.count(
+            shrinkWrap: true,
+            crossAxisCount: 4,
             children: [
-              "7", "8", "9", "/",
-              "4", "5", "6", "*",
-              "1", "2", "3", "-",
-              "C", "0", "=", "+"
-            ].map((text) {
-              return SizedBox(
-                width: 75,
-                height: 75,
-                child: ElevatedButton(
-                  onPressed: () => onButtonPressed(text),
-                  child: Text(text, style: TextStyle(fontSize: 24)),
-                ),
+              '7', '8', '9', 'C',
+              '4', '5', '6', '/',
+              '1', '2', '3', '*',
+              '0', '.', '=', '+',
+            ].map((value) {
+              return ElevatedButton(
+                onPressed: () => onButtonClick(value),
+                child: Text(value, style: TextStyle(fontSize: 24)),
               );
             }).toList(),
           ),
@@ -71,3 +70,4 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     );
   }
 }
+
