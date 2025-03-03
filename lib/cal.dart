@@ -20,25 +20,29 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         _num1 = 0;
         _num2 = 0;
         _operation = "";
-      } else if (text == "+" || text == "-" || text == "x" || text == "/") {
-        _num1 = double.parse(_currentInput);
-        _operation = text;
-        _currentInput = "";
-      } else if (text == "=") {
-        _num2 = double.parse(_currentInput);
-        if (_operation == "+") {
-          _output = (_num1 + _num2).toString();
-        } else if (_operation == "-") {
-          _output = (_num1 - _num2).toString();
-        } else if (_operation == "x") {
-          _output = (_num1 * _num2).toString();
-        } else if (_operation == "/") {
-          _output = (_num1 / _num2).toString();
+      } else if (text == "+" || text == "-" || text == "×" || text == "÷") {
+        if (_currentInput.isNotEmpty) {
+          _num1 = double.parse(_currentInput);
+          _operation = text;
+          _currentInput = "";
         }
-        _currentInput = _output;
-        _num1 = 0;
-        _num2 = 0;
-        _operation = "";
+      } else if (text == "=") {
+        if (_currentInput.isNotEmpty) {
+          _num2 = double.parse(_currentInput);
+          if (_operation == "+") {
+            _output = (_num1 + _num2).toString();
+          } else if (_operation == "-") {
+            _output = (_num1 - _num2).toString();
+          } else if (_operation == "×") {
+            _output = (_num1 * _num2).toString();
+          } else if (_operation == "÷") {
+            _output = (_num2 != 0) ? (_num1 / _num2).toString() : "Error";
+          }
+          _currentInput = _output;
+          _num1 = 0;
+          _num2 = 0;
+          _operation = "";
+        }
       } else {
         _currentInput += text;
         _output = _currentInput;
@@ -49,56 +53,88 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Calculator")),
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text("Calculator", style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.black,
+        elevation: 0,
+      ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Text(
-            _output,
-            style: TextStyle(fontSize: 32),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            alignment: Alignment.centerRight,
+            child: Text(
+              _output,
+              style: TextStyle(fontSize: 48, color: Colors.white, fontWeight: FontWeight.bold),
+            ),
           ),
-          Text(
-            _currentInput,
-            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 20),
-          Wrap(
-            children: <Widget>[
-              _buildButton("7"),
-              _buildButton("8"),
-              _buildButton("9"),
-              _buildButton("/"),
-              _buildButton("4"),
-              _buildButton("5"),
-              _buildButton("6"),
-              _buildButton("x"),
-              _buildButton("1"),
-              _buildButton("2"),
-              _buildButton("3"),
-              _buildButton("-"),
-              _buildButton("C"),
-              _buildButton("0"),
-              _buildButton("="),
-              _buildButton("+"),
-            ],
+          SizedBox(height: 10),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey[900],
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+              ),
+              child: GridView.count(
+                crossAxisCount: 4,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                children: [
+                  _buildButton("C", Colors.redAccent),
+                  _buildButton("÷", Colors.orange),
+                  _buildButton("×", Colors.orange),
+                  _buildButton("⌫", Colors.grey),
+                  _buildButton("7"),
+                  _buildButton("8"),
+                  _buildButton("9"),
+                  _buildButton("-", Colors.orange),
+                  _buildButton("4"),
+                  _buildButton("5"),
+                  _buildButton("6"),
+                  _buildButton("+", Colors.orange),
+                  _buildButton("1"),
+                  _buildButton("2"),
+                  _buildButton("3"),
+                  _buildButton("=", Colors.green),
+                  _buildButton("0", Colors.white, isWide: true),
+                  _buildButton(".", Colors.white),
+                ],
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildButton(String text) {
-    return SizedBox(
-      width: 70,
-      height: 70,
-      child: ElevatedButton(
-        onPressed: () => _buttonPressed(text),
+  Widget _buildButton(String text, [Color? color, bool isWide = false]) {
+    return GestureDetector(
+      onTap: () => _buttonPressed(text),
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: color ?? Colors.grey[800],
+          borderRadius: BorderRadius.circular(12),
+          gradient: (color == null)
+              ? LinearGradient(
+                  colors: [Colors.grey[800]!, Colors.grey[700]!],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )
+              : null,
+        ),
+        width: isWide ? 160 : 70,
+        height: 70,
         child: Text(
           text,
-          style: TextStyle(fontSize: 24),
+          style: TextStyle(fontSize: 28, color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
     );
   }
 }
+
 
