@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 class TodoScreen extends StatefulWidget {
@@ -6,22 +7,42 @@ class TodoScreen extends StatefulWidget {
 }
 
 class _TodoScreenState extends State<TodoScreen> {
-  List<Map<String, dynamic>> _tasks = [];
-  TextEditingController _taskController = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
+  List<String> _tasks = [];
 
   void _addTask() {
-    if (_taskController.text.isNotEmpty) {
+    if (_controller.text.isNotEmpty) {
       setState(() {
-        _tasks.add({"task": _taskController.text, "completed": false});
-        _taskController.clear();
+        _tasks.add(_controller.text);
+        _controller.clear();
       });
     }
   }
 
-  void _toggleTask(int index) {
-    setState(() {
-      _tasks[index]["completed"] = !_tasks[index]["completed"];
-    });
+  void _editTask(int index) {
+    _controller.text = _tasks[index];
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Edit Task"),
+        content: TextField(
+          controller: _controller,
+          decoration: InputDecoration(hintText: "Enter task"),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _tasks[index] = _controller.text;
+                _controller.clear();
+              });
+              Navigator.pop(context);
+            },
+            child: Text("Update"),
+          ),
+        ],
+      ),
+    );
   }
 
   void _deleteTask(int index) {
@@ -33,74 +54,51 @@ class _TodoScreenState extends State<TodoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("To-Do List", style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.grey[900],
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _taskController,
-              decoration: InputDecoration(
-                hintText: "Enter a new task...",
-                filled: true,
-                fillColor: Colors.grey[800],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
+      appBar: AppBar(title: Text("To-Do List")),
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(hintText: "Enter task"),
+                  ),
                 ),
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.add, color: Colors.white),
+                SizedBox(width: 10),
+                ElevatedButton(
                   onPressed: _addTask,
+                  child: Text("Add"),
                 ),
-              ),
-              style: TextStyle(color: Colors.white),
+              ],
             ),
-            SizedBox(height: 20),
-            Expanded(
-              child: _tasks.isEmpty
-                  ? Center(
-                      child: Text(
-                        "No tasks yet!",
-                        style: TextStyle(color: Colors.grey, fontSize: 18),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _tasks.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(_tasks[index]),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.edit, color: Colors.blue),
+                        onPressed: () => _editTask(index),
                       ),
-                    )
-                  : ListView.builder(
-                      itemCount: _tasks.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          color: Colors.grey[850],
-                          child: ListTile(
-                            leading: Checkbox(
-                              value: _tasks[index]["completed"],
-                              onChanged: (value) => _toggleTask(index),
-                              activeColor: Colors.green,
-                            ),
-                            title: Text(
-                              _tasks[index]["task"],
-                              style: TextStyle(
-                                fontSize: 18,
-                                decoration: _tasks[index]["completed"]
-                                    ? TextDecoration.lineThrough
-                                    : null,
-                                color: _tasks[index]["completed"]
-                                    ? Colors.grey
-                                    : Colors.white,
-                              ),
-                            ),
-                            trailing: IconButton(
-                              icon: Icon(Icons.delete, color: Colors.redAccent),
-                              onPressed: () => _deleteTask(index),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                      IconButton(
+                        icon: Icon(Icons.delete, color: Colors.red),
+                        onPressed: () => _deleteTask(index),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
