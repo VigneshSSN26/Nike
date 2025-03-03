@@ -1,10 +1,9 @@
 name: nike
-description: A custom Flutter package for various utilities.
-version: 1.0.0
-homepage: https://github.com/VigneshSSN26/Nike
+description: A Flutter package.
 
 environment:
-sdk: "3.7.0"
+  sdk: ">=2.12.0 <4.0.0" # Ensure null safety support
+
 
 dependencies:
   flutter:
