@@ -12,7 +12,7 @@ class _QuizScreenState extends State<QuizScreen> {
   List<Map<String, dynamic>> _questions = [
     {
       "question": "What is the capital of France?",
-      "options": ["Berlin", "Madrid", "Paris", "Lisbon"],
+      "options": ["Berlin", "Madrid", "Paris", "Lisbonhttp: ^0.13.6"],
       "answer": "Paris"
     },
     {
