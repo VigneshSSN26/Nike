@@ -3,6 +3,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 
+#https://instaflutter.com/flutter-tutorials/flutter-maps/
+#https://github.com/anoobbava/movie_man/tree/master
+
 void main() {
   runApp(HotelSearchApp());
 }
