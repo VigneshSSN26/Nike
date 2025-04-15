@@ -5,6 +5,13 @@ import 'package:google_places_flutter/google_places_flutter.dart';
 
 #https://instaflutter.com/flutter-tutorials/flutter-maps/
 #https://github.com/anoobbava/movie_man/tree/master
+// <meta-data
+//   android:name="com.google.android.geo.API_KEY"
+//   android:value="YOUR_GOOGLE_MAPS_API_KEY" />
+// <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+// <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+// <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
 
 void main() {
   runApp(HotelSearchApp());
