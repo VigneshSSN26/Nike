@@ -3,6 +3,23 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
+# dependencies:
+#   url_launcher: ^6.0.10             # Used to launch URLs in the device browser or apps
+#   web_socket_channel: ^2.4.0        # For real-time communication using WebSockets
+#   lottie: ^2.6.0                    # For beautiful Lottie animations in Flutter
+#   video_player: ^2.7.0              # To play videos from assets, files or the internet
+#   google_fonts: ^4.0.4              # Easily use Google Fonts in your Flutter app
+#   http: ^0.13.6                     # Used for making HTTP requests
+#   shared_preferences: ^2.2.2        # To store key-value pairs persistently
+#   fl_chart: ^0.64.0                 # For rendering attractive charts like bar, line, pie, etc.
+#   google_maps_flutter: ^2.1.1      # Embeds Google Maps widget in Flutter apps
+#   geolocator: ^9.0.1                # Handles location-related functionality like GPS
+#   google_places_flutter: ^2.1.0    # Autocomplete places widget using Google Places API
+#   intl: ^0.18.1                     # For internationalization and date/time formatting
+#   timezone: ^0.9.0                  # Handle and manipulate time zones in Dart
+#   image_picker: ^1.0.4              # For picking images from gallery or camera
+
+
 class QuizScreen extends StatefulWidget {
   @override
   _QuizScreenState createState() => _QuizScreenState();
